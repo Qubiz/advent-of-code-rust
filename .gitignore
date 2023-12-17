@@ -1,0 +1,5 @@
+# Build related
+/target
+
+# Editor related
+.idea
