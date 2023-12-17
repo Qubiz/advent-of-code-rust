@@ -6,26 +6,28 @@ use std::error::Error;
 use clap::Parser;
 use tokio::main;
 
+use crate::aoc::{RawPuzzleInput, Puzzle, puzzle_not_implemented, PuzzleResult, SessionToken};
+
 #[main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args = cli::Arguments::parse();
-    let session_token = aoc::session_token::from_env("AOC_SESSION_TOKEN")?;
+    let session_token = SessionToken::from_env("AOC_SESSION_TOKEN")?;
 
-    println!("Session token: {}", session_token.0);
-
-    let puzzle_input = aoc::puzzle_input::fetch(&session_token.0, aoc::Year(args.year), aoc::Day(args.day)).await
+    let raw_puzzle_input = RawPuzzleInput::fetch(&session_token.0, aoc::Year(args.year), aoc::Day(args.day)).await
         .map_err(|error| format!("Failed to fetch puzzle input for: {}", error))?;
 
-    println!("Puzzle input:\n{}", puzzle_input.0);
-
-    match args.year {
+    let puzzle_result: PuzzleResult = match args.year {
         2023 => {
-            println!("Day {} for year {} not implemented", args.day, args.year);
+            match args.day {
+                1 => year2023::day1::Day1::solve(&raw_puzzle_input),
+                _ => puzzle_not_implemented(),
+            }
         }
-        _ => println!("Invalid year"),
-    }
+        _ => puzzle_not_implemented()
+    };
 
-    println!("Year: {}", args.year);
+    println!("Advent of Code {} - Day {}", args.year, args.day);
+    println!("{}", puzzle_result);
 
     Ok(())
 }
