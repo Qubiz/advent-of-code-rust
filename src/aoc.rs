@@ -71,10 +71,13 @@ impl RawPuzzleInput {
 }
 
 
+#[derive(Debug, PartialEq)]
 pub struct Part1Result(pub usize);
 
+#[derive(Debug, PartialEq)]
 pub struct Part2Result(pub usize);
 
+#[derive(Debug, PartialEq)]
 pub struct PuzzleResult {
     pub part1: Result<Part1Result, PuzzleError>,
     pub part2: Result<Part2Result, PuzzleError>,
@@ -83,12 +86,12 @@ pub struct PuzzleResult {
 impl Display for PuzzleResult {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match &self.part1 {
-            Ok(result) => write!(f, "Part 1: {}\n", result.0),
-            Err(error) => write!(f, "Part 1: {}\n", error),
+            Ok(result) => writeln!(f, "Part 1: {}", result.0),
+            Err(error) => writeln!(f, "Part 1: {}", error),
         }?;
         match &self.part2 {
-            Ok(result) => write!(f, "Part 2: {}\n", result.0),
-            Err(error) => write!(f, "Part 2: {}\n", error),
+            Ok(result) => writeln!(f, "Part 2: {}", result.0),
+            Err(error) => writeln!(f, "Part 2: {}", error),
         }
     }
 }
@@ -114,7 +117,7 @@ pub trait Puzzle {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum PuzzleError {
     NotImplemented,
 }
